@@ -1,26 +1,32 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
-class User (models.Model):
+
+
+class UserProfile(models.Model):
 	#Falta asociar uno o más libros
-	RUT = models.CharField(max_length=15) #RUT
-	commune = models.CharField(max_length=20)
-	phone = models.PositiveIntegerField()
-	NONE = 'Ninguno'
-	FAV_GENRE_CHOICES = (
-		('FANTASY', "Fantasía"),
-		('FICTION', "Ficción"),
-		('HORROR', "Terror"),
-		('ROMANTIC', "Romantico"),
-	)
-	fav_genre = models.CharField(
-		max_length=20,
-		choices=FAV_GENRE_CHOICES,
-		default=NONE,
-	)
+	user = models.OneToOneField(User,blank=True, null=True, on_delete=models.CASCADE)
+	is_admin = models.BooleanField(default=False)
+	is_user = models.BooleanField(default=False)
 
-	def __str__(self):
-		return self.RUT
+
+
+class UserBook(models.Model):
+	user = models.OneToOneField(UserProfile,blank=True, null=True, on_delete=models.CASCADE)
+	RUN = models.CharField(max_length=15)
+	commune = models.CharField(max_length=20)
+	phone = models.CharField(max_length=20)
+	# fav_genre = models.CharField(
+	# 	max_length=20,
+	# 	choices=FAV_GENRE_CHOICES,
+	# 	default='Ninguno'
+	# )
+
+
+
+class Administrator(models.Model):
+	user = models.OneToOneField(UserProfile,blank=True, null=True, on_delete=models.CASCADE)
+	dato = models.CharField(max_length=15)
 
 
 
@@ -71,3 +77,23 @@ class Book (models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+
+class Genre(models.Model):
+	adventure = models.BooleanField()
+	art = models.BooleanField()
+	biography = models.BooleanField()
+	fiction = models.BooleanField()
+	fantasy = models.BooleanField()
+	history = models.BooleanField()
+	horror = models.BooleanField()
+	mistery = models.BooleanField()
+	miythology = models.BooleanField()
+	poetry = models.BooleanField()
+	romance = models.BooleanField()
+	science = models.BooleanField()
+	superhero = models.BooleanField()
+	thriller = models.BooleanField()
+	tragedy = models.BooleanField()
+	western = models.BooleanField()

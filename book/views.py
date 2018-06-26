@@ -2,22 +2,20 @@ from django.shortcuts import render, redirect
 from book.models import Book, User
 from book.forms import BookForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
-from django.http import JsonResponse
 from django.template import RequestContext, loader
 from django.contrib import messages
 
 
 # Create your views here.
 def index(request):
-	template_name = "login.html"
+	template_name = "login/login.html"
 	return render(request,template_name)
 
 
 
 def inicio(request):
 	object_list = Book.objects.all() 
-	template_name = "inicio.html"
+	template_name = "book/inicio.html"
 	return render(request, template_name, {'object_list':object_list})
 
 
@@ -28,7 +26,7 @@ def list_book(request):
 	page = request.GET.get('page')									#PASA SABER QUÉ PÁGINA EN F(X) DE REGISTROS
 
 	data = {}
-	template_name = 'list_book.html'
+	template_name = 'book/list_book.html'
 
 	try:
 		b = paginator.page(page)
@@ -57,7 +55,7 @@ def add_book(request):
 	else:
 		form = BookForm()
 	
-	template_name = 'add_book.html'
+	template_name = 'book/add_book.html'
 	return render(request, template_name, context)
 
 
@@ -75,7 +73,7 @@ def update_book(request,id):
 		if b.is_valid():
 			b.save()
 		return redirect('list_book')
-	template_name = 'add_book.html'
+	template_name = 'book/add_book.html'
 	return render(request, template_name, data)
 
 
@@ -93,5 +91,18 @@ def delete_book(request,id):
 
 
 def prueba(request):
-    template_name = "prueba.html"
+    template_name = "base/prueba.html"
     return render(request,template_name)
+
+
+
+def add_genres(request):
+	template_name="genres.html"
+	data = {}
+	#if request.method == 'POST':
+	#form_genre = GenreForm(request.POST or None)
+	#if form_genre.is_valid():
+	#    form_genre.save()
+	#    return redirect("base")
+	#data['form'] = form_genre
+	return render(request,template_name,data)

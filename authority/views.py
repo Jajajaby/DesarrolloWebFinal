@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.forms import UserCreationForm
 
 def signup_admin(request):
-    template_name="signup_admin.html"
+    template_name="login/signup_admin.html"
     data = {}
     #if request.method == 'POST':
     form_admin = SignUpAdminForm(request.POST or None)
@@ -23,12 +23,18 @@ def signup_admin(request):
         return redirect("home")
     data['form'] = form_admin
     return render(request,template_name,data)
+
+
+
 @login_required(login_url="/")
 def logout_admin(request):
     logout(request)
     return redirect("home")
+
+
+
 def login_admin(request):
-    template_name = "login.html"
+    template_name = "login/login.html"
     data = {}
     logout(request)
     username = password = ""
@@ -40,6 +46,30 @@ def login_admin(request):
             if user.is_active:
                 login(request,user)
                 return redirect("home")
+            else:
+                messages.warning(request,"Usuario o contraseña incorrecta")
+        else:
+            #usuario no existe
+            messages.error(request,"Usuario o contraseña incorrecta")
+    return render(request,template_name)
+
+
+def login_user(request):
+    template_name = "login.html"
+    data = {}
+    logout(request)
+    username = password = ""
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username,password=password)
+        if user is not None:
+            user_profile = UserProfile.objects.get(user= user)
+            flag = user_profile.is_user
+            if user.is_active:
+                if flag:
+                    login(request,user)
+                    return redirect("inicio")
             else:
                 messages.warning(request,"Usuario o contraseña incorrecta")
         else:

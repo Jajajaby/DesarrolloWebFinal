@@ -23,13 +23,3 @@ class BookAdmin(admin.ModelAdmin):
     def thumb(self, obj):
         return mark_safe(u'<img src="%s" style="width:10px;height:10px;"/>' \
             % (obj.picture.url))
-
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = (
-    		'RUT',
-        	'commune', 
-        	'phone', 
-        	'fav_genre', 
-    )
